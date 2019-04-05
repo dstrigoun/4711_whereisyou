@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style>
+        html, body, #map, #pano {
+            height: 100%;
+            width: 100%;
+        }
+        #map {
+            position: absolute;
+            height:25%;
+            width:25%;
+            bottom: 5px;
+            right: 5px;
+            z-index: 5;
+        }
+    </style>
+    <script src="iswater.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbbejICWOI5uhKzrnp-mL_waPjZzHB3_c&callback=initMap"
+    async defer></script>
+    <script defer> 
+
+    let initalLocation = {lat: generateLatitude(), lng: generateLongitude()}
+
+    function generateLongitude() {
+        return (Math.floor(Math.random()* 360) - 180);
+    }
+
+    function generateLatitude() {
+        return (Math.floor(Math.random()* 180) - 90);
+    }
+
+
+    function initMap() {
+        
+        let map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 0, lng: 0},
+          zoom: 1
+        });
+        let panorama = new google.maps.StreetViewPanorama(
+            document.getElementById('pano'), {
+              position: initalLocation,
+              pov: {
+                heading: 34,
+                pitch: 10
+              }
+            });
+        //map.setStreetView(panorama);
+  
+      }
+    </script>
+
+      
+</head>
+<body>
+    <div id="pano"></div>
+    <div id="map"></div>
+</body>
+</html>
