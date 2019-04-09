@@ -1,6 +1,23 @@
 let twitter_key = "FQtrXgRBQqlSdXD3a8tjJ3PY8";
 let twitter_secret = "tNN7hi2DwapeJvzat6qhK4ksCyvUUmlogTjZV31JUeGsHACuqJ";
 
+function get_daily_challenge() {
+    var request = new XMLHttpRequest()
+
+    request.open('GET', 'https://whereisyou.herokuapp.com/worker/dailyChallenge.php', true)
+    // request.setRequestHeader('Access-Control-Allow-Origin', '*');
+    request.onload = function() {
+        // Begin accessing JSON data here
+        var data = JSON.parse(this.response)
+
+        if (request.status >= 200 && request.status < 400) {
+            console.log(data);
+        }
+    }
+
+    request.send()
+}
+
 // link twitter api
 function twitter_search() {
     // got consumer key and secret by creating an account
