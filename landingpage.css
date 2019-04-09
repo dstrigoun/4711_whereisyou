@@ -1,0 +1,58 @@
+body {
+    background: #000000;
+}
+
+#banner {
+   width: 100%;
+   /* height: 600px;  */
+   filter: blur(5px);
+}
+img {
+    width: 100%;
+    height: inherit;
+}
+.bg-text {
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+    border: 2px solid #f1f1f1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 60%;
+    padding: 20px;
+    text-align: center;
+  }
+
+  #title {
+    font-weight: bold;
+  }
+
+  #info-paragraph {
+      padding-left: 20px;
+      padding-right: 20px;
+      text-align: left;
+  }
+
+  .g-signin2{
+    display: flex;
+    justify-content: center;
+  }
+
+  #google-button-container {
+    z-index: 2;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    color: white;
+    padding: 20px;
+    width: 60%;
+    position: absolute;
+    left: 60%;
+    top: 70%;
+    transform: translate(-70%, -60%);
+  }
+
+
