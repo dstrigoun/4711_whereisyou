@@ -7,61 +7,63 @@
     <title>Document</title>
 
     <style>
-        html, body, #map, #pano {
+        #pano {
             height: 100%;
             width: 100%;
+        }
+        #pano-con {
+            position: fixed;
+            top: 46.4px;
+            left: 0;
+            bottom: 0;
+            right: 0;
         }
         #map {
             position: absolute;
             height:25%;
             width:25%;
-            bottom: 5px;
+            bottom: 15px;
             right: 5px;
             z-index: 5;
+        }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        li {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
         }
     </style>
     <script src="game.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbbejICWOI5uhKzrnp-mL_waPjZzHB3_c&callback=initMap"
     async defer></script>
     <script defer> 
-
-    let initalLocation = {lat: generateLatitude(), lng: generateLongitude()}
-
-    function generateLongitude() {
-        return (Math.floor(Math.random()* 360) - 180);
-    }
-
-    function generateLatitude() {
-        return (Math.floor(Math.random()* 180) - 90);
-    }
-
-
-    function initMap() {
-        
-        let map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 0, lng: 0},
-          zoom: 1
-        });
-        let panorama = new google.maps.StreetViewPanorama(
-            document.getElementById('pano'), {
-              position: initalLocation,
-              pov: {
-                heading: 34,
-                pitch: 10
-              }
-            });
-        //map.setStreetView(panorama);
-
-        get_daily_challenge();
-        twitter_search();
-  
-      }
-    </script>
-
-      
+    get_daily_challenge();
+    </script>      
 </head>
 <body>
-    <div id="pano"></div>
+    <div id="control">
+        <ul>
+            <li>Round</li>
+            <li>Score</li>
+        </ul>
+    </div>
+    <div id="pano-con">
+        <div id="pano"></div>
+    </div>
     <div id="map"></div>
 </body>
 </html>

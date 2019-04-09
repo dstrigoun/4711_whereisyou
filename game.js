@@ -1,26 +1,71 @@
-let twitter_key = "FQtrXgRBQqlSdXD3a8tjJ3PY8";
-let twitter_secret = "tNN7hi2DwapeJvzat6qhK4ksCyvUUmlogTjZV31JUeGsHACuqJ";
+let dailyChallenge = {};
+let index = 0;
 
+/*
+* get_daily_challenge()
+*
+* Get daily challenge coordinates from whereisyou API.
+* Upon successful request, start the game.
+*/
 function get_daily_challenge() {
-    var request = new XMLHttpRequest()
+    let request = new XMLHttpRequest();
 
-    request.open('GET', 'https://whereisyou.herokuapp.com/worker/dailyChallenge.php', true)
-    // request.setRequestHeader('Access-Control-Allow-Origin', '*');
+    request.open('GET', 'https://whereisyou.herokuapp.com/worker/dailyChallenge.php', true);
+    
     request.onload = function() {
         // Begin accessing JSON data here
-        var data = JSON.parse(this.response)
+        let data = JSON.parse(this.response);
 
         if (request.status >= 200 && request.status < 400) {
-            console.log(data);
+            for (let i = 0; i < 5; i++) {
+                dailyChallenge[data[i].qNum] = data[i];
+            }
+            update_map();
+            // twitter_search();
         }
     }
 
-    request.send()
+    request.send();
 }
 
-// link twitter api
+/*
+* update_map()
+*
+* Set StreetView to the next daily challenge coordinates.
+* TODO: mini map shows where person is, need to separate the two
+* TODO: allow to drop a marker on mini map
+*/
+function update_map() {
+    let initalLocation = {lat: parseInt(dailyChallenge[index].latitude, 10), lng: parseInt(dailyChallenge[index].longitude, 10)};
+    let tempLocation = {lat: 49.238060, lng: -123.019860};  // using this until API gets updated with nearestStreetView
+
+    let map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 0, lng: 0},
+        zoom: 1
+    });
+    let panorama = new google.maps.StreetViewPanorama(
+        document.getElementById('pano'), {
+        position: tempLocation,
+        pov: {
+            heading: 34,
+            pitch: 10
+        }
+    });
+
+    map.setStreetView(panorama);
+}
+
+
+/*
+* twitter_search()
+*
+* TODO: Get bearer token and start searching for tweets
+*/
 function twitter_search() {
     // got consumer key and secret by creating an account
+    let twitter_key = "FQtrXgRBQqlSdXD3a8tjJ3PY8";
+    let twitter_secret = "tNN7hi2DwapeJvzat6qhK4ksCyvUUmlogTjZV31JUeGsHACuqJ";
+
     // URL encode both according to RFC 1738
     let key_URI = encodeURI(twitter_key);
     let secret_URI = encodeURI(twitter_secret);
@@ -44,7 +89,3 @@ function twitter_search() {
 
     // should get JSON back
 }
-
-// link instagram api
-
-// link weather api
