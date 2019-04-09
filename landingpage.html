@@ -34,7 +34,7 @@
     
     <script>
       function onSignIn(googleUser) {
-        // Useful data for your client-side scripts:
+        // // Useful data for your client-side scripts:
         let profile = googleUser.getBasicProfile();
         console.log("ID: " + profile.getId()); // Don't send this directly to your server!
         console.log('Full Name: ' + profile.getName());
@@ -43,26 +43,31 @@
         console.log("Image URL: " + profile.getImageUrl());
         console.log("Email: " + profile.getEmail());
 
-        // The ID token you need to pass to your backend:
-        let id_token = googleUser.getAuthResponse().id_token;
-        console.log("ID Token: " + id_token);
+        // // The ID token you need to pass to your backend:
+        // let id_token = googleUser.getAuthResponse().id_token;
+        // console.log("ID Token: " + id_token);
 
-        let params = 'email=' + profile.getEmail() + '&firstName=' + profile.getGivenName() + '&lastName=' + profile.getFamilyName();
+         let params = {}
+         params.email = profile.getEmail();
+         params.firstName = profile.getName();
+         params.lastName = profile.getFamilyName();
 
         localStorage.removeItem("email");
         localStorage.setItem("email", profile.getEmail());
 
         // //HTTPS POST request
-        // let xhr = new XMLHttpRequest();
-        // xhr.open('POST', 'https://jeffchoy.ca/comp4711/badgr-app/users');
-        // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        // xhr.onload = function() {
-        //   console.log('Signed in as: ' + xhr.responseText);
-        // };
-        // xhr.send(params);
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://jeffchoy.ca/comp4711/badgr-app/users');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = function() {
+          console.log('Signed in as: ' + xhr.responseText);
+        };
+        xhr.send(JSON.stringify(params));
+        
+        //todo: uncomment after Jeff adds a return end point
         // xhr.onreadystatechange = function(){
         //   if(this.readyState == 4 && this.status == 200) {
-        //     location.href = "game.html";
+            location.href = "game.html";
         //   }
         // }
       }  
