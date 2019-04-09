@@ -4,66 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-
-    <style>
-        #pano {
-            height: 100%;
-            width: 100%;
-        }
-        #pano-con {
-            position: fixed;
-            top: 46.4px;
-            left: 0;
-            bottom: 0;
-            right: 0;
-        }
-        #map {
-            position: absolute;
-            height:25%;
-            width:25%;
-            bottom: 15px;
-            right: 5px;
-            z-index: 5;
-        }
-        ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #333;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-        }
-
-        li {
-            float: left;
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-    </style>
-    <script src="game.js"></script>
+    <title>WhereIsYou</title>
+    <link rel="stylesheet" type="text/css" href="game.css">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbbejICWOI5uhKzrnp-mL_waPjZzHB3_c&callback=initMap"
-    async defer></script>
-    <script defer> 
-    get_daily_challenge();
-    </script>      
+    async defer></script>     
 </head>
 <body>
     <div id="control">
         <ul>
-            <li>Round</li>
-            <li>Score</li>
+            <li class="item" id="round">Round</li>
+            <li class="item" id="score">Score</li>
+            <li class="item"><button id="submit">Submit</button></li>
         </ul>
     </div>
     <div id="pano-con">
         <div id="pano"></div>
     </div>
     <div id="map"></div>
+
+    <script src="game.js"></script>
+    <script defer> 
+        get_daily_challenge();
+    </script> 
 </body>
 </html>

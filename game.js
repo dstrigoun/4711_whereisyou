@@ -1,6 +1,13 @@
 let dailyChallenge = {};
 let index = 0;
 
+let roundText = document.getElementById("round");
+roundText.innerText = index + "/5";
+document.appendChild(roundText);
+
+let submitButton = document.getElementById("submit");
+submitButton.onclick = function() {submit_round();}
+
 /*
 * get_daily_challenge()
 *
@@ -53,6 +60,39 @@ function update_map() {
     });
 
     map.setStreetView(panorama);
+}
+
+/*
+* submit_round()
+*
+* Calculate distance between guess and actual.
+* Submit score from current round to whereisyou API.
+* Direct user to Results page.
+*/
+function submit_round() {
+    let request = new XMLHttpRequest();
+
+    // Calculate distance
+
+    request.open('POST', 'https://whereisyou.herokuapp.com/scores.php', true);
+    request.setRequestHeader('Content-Type', 'application/json');
+    
+    request.onload = function() {
+        // Begin accessing JSON data here
+        let data = JSON.parse(this.response);
+
+        if (request.status >= 200 && request.status < 400) {
+            console.log("Successful POST");
+        }
+    }
+
+    //JSON object
+    //  userID
+    //  challengeID
+    //  score
+    //  distance
+
+    request.send(); // JSON object
 }
 
 
