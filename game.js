@@ -130,6 +130,10 @@ function twitter_search() {
         if (request.status >= 200 && request.status < 400) {
             console.log("Successful POST");
             console.log(data.access_token);
+
+            // data.access_token will contain the twitter bearer token
+            // encode this to base64
+            // every twitter API call from here will need to include this in the Authorization header
         }
     }
 
