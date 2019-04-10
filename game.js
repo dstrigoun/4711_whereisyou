@@ -99,7 +99,7 @@ function submit_round() {
 /*
 * twitter_search()
 *
-* TODO: Get bearer token and start searching for tweets
+* TODO: Host this to see if API call works...
 */
 function twitter_search() {
     // got consumer key and secret by creating an account
@@ -118,14 +118,20 @@ function twitter_search() {
 
     console.log(base64_combined);
 
-    // POST /oauth2/token HTTP/1.1
-    // Host: api.twitter.com
-    // User-Agent: whereisyou
-    // Authorization: Basic <key:secret string>
-    // Content-Type: application/x-www-form-urlencoded;charset=UTF-8
-    // Content-Length: 29
-    // Accept-Encoding: gzip
-    // grant_type=client_credentials
+    let request = new XMLHttpRequest();
+    request.open('POST', 'api.twitter.com', true);
+    request.setRequestHeader('Authorization', 'Basic ' + base64_combined);
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
+    
+    request.onload = function() {
+        // Begin accessing JSON data here
+        let data = JSON.parse(this.response);
 
-    // should get JSON back
+        if (request.status >= 200 && request.status < 400) {
+            console.log("Successful POST");
+            console.log(data.access_token);
+        }
+    }
+
+    request.send('grant_type=client_credentials');
 }
