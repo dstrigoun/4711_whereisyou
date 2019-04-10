@@ -43,7 +43,7 @@ function get_daily_challenge() {
 * TODO: allow to drop a marker on mini map
 */
 function update_map() {
-    let initalLocation = {lat: parseInt(dailyChallenge[index].latitude, 10), lng: parseInt(dailyChallenge[index].longitude, 10)};
+    let location = {lat: parseInt(dailyChallenge[index].latitude, 10), lng: parseInt(dailyChallenge[index].longitude, 10)};
     let tempLocation = {lat: 49.238060, lng: -123.019860};  // using this until API gets updated with nearestStreetView
 
     let map = new google.maps.Map(document.getElementById('map'), {
@@ -52,7 +52,7 @@ function update_map() {
     });
     let panorama = new google.maps.StreetViewPanorama(
         document.getElementById('pano'), {
-        position: tempLocation,
+        position: location,
         pov: {
             heading: 34,
             pitch: 10
