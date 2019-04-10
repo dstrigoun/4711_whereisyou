@@ -1,9 +1,11 @@
 let dailyChallenge = {};
 let index = 0;
+let marker;
+let initalLocation;
 
 let roundText = document.getElementById("round");
 roundText.innerText = index + "/5";
-document.appendChild(roundText);
+//document.appendChild(roundText);
 
 let submitButton = document.getElementById("submit");
 submitButton.onclick = function() {submit_round();}
@@ -43,7 +45,7 @@ function get_daily_challenge() {
 * TODO: allow to drop a marker on mini map
 */
 function update_map() {
-    let initalLocation = {lat: parseInt(dailyChallenge[index].latitude, 10), lng: parseInt(dailyChallenge[index].longitude, 10)};
+    initalLocation = {lat: parseInt(dailyChallenge[index].latitude, 10), lng: parseInt(dailyChallenge[index].longitude, 10)};
     let tempLocation = {lat: 49.238060, lng: -123.019860};  // using this until API gets updated with nearestStreetView
 
     let map = new google.maps.Map(document.getElementById('map'), {
@@ -58,8 +60,14 @@ function update_map() {
             pitch: 10
         }
     });
-
-    map.setStreetView(panorama);
+    //google.maps.event.clearListeners(map, 'click');
+    map.addListener('click', function(event) {
+        if (marker != null) {
+            marker.setMap(null);
+        }
+        placeMarker(event.latLng, map);
+     });
+   
 }
 
 /*
@@ -129,3 +137,24 @@ function twitter_search() {
 
     // should get JSON back
 }
+
+ function placeMarker(location, map) {
+    marker = new google.maps.Marker({
+         position: location, 
+         map: map
+     });
+     map.panTo(location);
+     calculateDistance();
+ }
+
+ function calculateDistance(){
+    let xdistance = Math.abs(marker.getPosition().lat() - initalLocation.lat); 
+    let ydistance = Math.abs(marker.getPosition().lng() - initalLocation.lng);
+    let distance = Math.sqrt(Math.pow(xdistance, 2) + Math.pow(ydistance, 2));
+    console.log(distance);
+    return distance;
+ }
+
+ function calculateScore(distance) {
+     let score = distance;
+ }
