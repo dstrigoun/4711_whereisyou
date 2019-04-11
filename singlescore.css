@@ -18,3 +18,14 @@
     padding: 20px;
     text-align: center;
   }
+
+  #next_button {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 60%;
+    padding: 20px;
+    text-align: center;
+  }
