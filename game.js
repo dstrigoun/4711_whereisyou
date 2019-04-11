@@ -95,7 +95,7 @@ function submit_round() {
 
     param = {};
     param.userId = localStorage.getItem("email");
-    param.challengeId = index;
+    param.challengeId = dailyChallenge[index].challengeId;
     let distance = calculateDistance();
     param.score = calculateScore(distance);
     param.distance = distance;

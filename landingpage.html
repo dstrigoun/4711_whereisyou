@@ -32,42 +32,70 @@
     
   
     
-    <script>
-      function onSignIn(googleUser) {
-        // Useful data for your client-side scripts:
-        let profile = googleUser.getBasicProfile();
-        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-        console.log('Full Name: ' + profile.getName());
-        console.log('Given Name: ' + profile.getGivenName());
-        console.log('Family Name: ' + profile.getFamilyName());
-        console.log("Image URL: " + profile.getImageUrl());
-        console.log("Email: " + profile.getEmail());
+    
+  <script>
 
-        // The ID token you need to pass to your backend:
-        let id_token = googleUser.getAuthResponse().id_token;
-        console.log("ID Token: " + id_token);
+  function getExternalToken() {
+    let request = new XMLHttpRequest();
 
-        let params = 'email=' + profile.getEmail() + '&firstName=' + profile.getGivenName() + '&lastName=' + profile.getFamilyName();
+    request.open('GET', 'https://whereisyou.herokuapp.com/keys.php', true);
+    request.setRequestHeader('key', 'bbc8e0e1-2dd4-4bc6-9f7d-1a0b3c5a3668');
+    
+    request.onload = function() {
+        // Begin accessing JSON data here
+        let data = JSON.parse(this.response);
 
-        localStorage.removeItem("email");
-        localStorage.setItem("email", profile.getEmail());
-        localStorage.setItem("index", 0);
+        if (request.status >= 200 && request.status < 400) {
+            sessionStorage.setItem("key", data);
+        }
+    }
 
-        // //HTTPS POST request
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://jeffchoy.ca/comp4711/badgr-app/users');
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onload = function() {
-          console.log('Signed in as: ' + xhr.responseText);
-        };
-        xhr.send(params);
-        //Uncomment after jeff returns something for end point call
-        //xhr.onreadystatechange = function(){
-          //if(this.readyState == 4 && this.status == 200) {
-            location.href = "game.html";
-          //}
-        //}
-      }  
+    request.send();
+  }
+
+  function onSignIn(googleUser) {
+      
+    // Useful data for your client-side scripts:
+    let profile = googleUser.getBasicProfile();
+    console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+    console.log('Full Name: ' + profile.getName());
+    console.log('Given Name: ' + profile.getGivenName());
+    console.log('Family Name: ' + profile.getFamilyName());
+    console.log("Image URL: " + profile.getImageUrl());
+    console.log("Email: " + profile.getEmail());
+
+    // The ID token you need to pass to your backend:
+    let id_token = googleUser.getAuthResponse().id_token;
+    console.log("ID Token: " + id_token);
+
+    let params = {}
+    params.email = profile.getEmail();
+    params.firstName = profile.getGivenName();
+    params.lastName = profile.getFamilyName();
+
+    localStorage.removeItem("email");
+    localStorage.setItem("email", profile.getEmail());
+    localStorage.setItem("index", 0);
+
+    // //HTTPS POST request
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://jeffchoy.ca/comp4711/badgr-app/users');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('authorization', sessionStorage.getItem("key"));
+    xhr.onload = function() {
+      console.log('Signed in as: ' + xhr.responseText);
+    };
+    xhr.send(JSON.stringify(params));
+
+    xhr.onreadystatechange = function(){
+      if(this.readyState == 4 && this.status == 200) {
+        location.href = "game.html";
+      }
+    }
+  }  
   </script> 
+  <script>
+      getExternalToken();
+  </script>
 </body>
 </html>
