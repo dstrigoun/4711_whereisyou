@@ -1,5 +1,5 @@
 let dailyChallenge = {};
-let index = 0;
+let index = parseInt(localStorage.getItem("index"));
 let marker;
 let initLocation;
 
@@ -20,6 +20,7 @@ function get_daily_challenge() {
     let request = new XMLHttpRequest();
 
     request.open('GET', 'https://whereisyou.herokuapp.com/worker/dailyChallenge.php', true);
+    request.setRequestHeader('key', 'bbc8e0e1-2dd4-4bc6-9f7d-1a0b3c5a3668');
     
     request.onload = function() {
         // Begin accessing JSON data here
@@ -30,7 +31,7 @@ function get_daily_challenge() {
                 dailyChallenge[data[i].qNum] = data[i];
             }
             update_map();
-            // twitter_search();
+            twitter_search();
         }
     }
 
@@ -45,8 +46,7 @@ function get_daily_challenge() {
 * TODO: allow to drop a marker on mini map
 */
 function update_map() {
-    initLocation = {lat: parseInt(dailyChallenge[index].latitude, 10), lng: parseInt(dailyChallenge[index].longitude, 10)};
-    let tempLocation = {lat: 49.238060, lng: -123.019860};  // using this until API gets updated with nearestStreetView
+    initLocation = {lat: parseFloat(dailyChallenge[index].latitude, 10), lng: parseFloat(dailyChallenge[index].longitude, 10)};
 
     let map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 0, lng: 0},
@@ -65,7 +65,7 @@ function update_map() {
             marker.setMap(null);
         }
         placeMarker(event.latLng, map);
-     });
+    });
 }
 
 /*
@@ -82,23 +82,35 @@ function submit_round() {
 
     request.open('POST', 'https://whereisyou.herokuapp.com/scores.php', true);
     request.setRequestHeader('Content-Type', 'application/json');
+    request.setRequestHeader('key', 'bbc8e0e1-2dd4-4bc6-9f7d-1a0b3c5a3668');
     
     request.onload = function() {
         // Begin accessing JSON data here
-        let data = JSON.parse(this.response);
+        //let data = JSON.parse(this.response);
 
-        if (request.status >= 200 && request.status < 400) {
+        //if (request.status >= 200 && request.status < 400) {
             console.log("Successful POST");
-        }
+        //}
     }
 
-    //JSON object
-    //  userID
-    //  challengeID
-    //  score
-    //  distance
+    param = {};
+    param.userId = localStorage.getItem("email");
+    param.challengeId = index;
+    let distance = calculateDistance();
+    param.score = calculateScore(distance);
+    param.distance = distance;
 
-    request.send(); // JSON object
+    request.send(JSON.stringify(param)); // JSON object
+
+    request.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status == 201) {
+            index++;
+            localStorage.setItem("index", index);
+            localStorage.setItem("distance", distance);
+            localStorage.setItem("score", param.score);
+            location.href = "singlescore.html";
+        }
+    }
 }
 
 
@@ -152,7 +164,6 @@ function placeMarker(location, map) {
         map: map
     });
     map.panTo(location);
-    calculateDistance();
 }
 
 function calculateDistance(){
@@ -164,5 +175,7 @@ function calculateDistance(){
 }
 
 function calculateScore(distance) {
-    let score = distance;
+    let score = 5000 - distance;
+    let result = Math.round(score);
+    return result;
 }
