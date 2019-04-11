@@ -74,7 +74,7 @@ function display_leaderboard(data) {
     tbl.setAttribute('border', '1');
     var tbdy = document.createElement('tbody');
 
-    for (var i = 0; i < 11; i++) {
+    for (var i = 0; i < scores.length; i++) {
         var tr = document.createElement('tr');
         for (var j = 0; j < 3; j++) {
             let td = document.createElement('td');
@@ -90,10 +90,11 @@ function display_leaderboard(data) {
                 if (j == 0) {
                     td.appendChild(document.createTextNode(index));
                 } else if (j == 1) {
-                    let name = scores[index];
+                    let name = scores[index][0];
                     td.appendChild(document.createTextNode(name));
                 } else {
-                    td.appendChild(document.createTextNode('hello?'));
+                    let score = scores[index][1];
+                    td.appendChild(document.createTextNode(score));
                 }
             }
             tr.appendChild(td);
@@ -112,22 +113,30 @@ function display_leaderboard(data) {
 */
 function get_top_ten(data) {
     function compare(a,b) {
-        if (data.a < data.b)
+        if (a > b)
             return -1;
-        if (data.a > data.b)
+        if (a < b)
             return 1;
         return 0;
     }
 
-    for(var i in data) {
-        console.log(i);             // key
-        console.log(data[i]);       // value
+    let data_values = Object.values(data);
+    data_values.sort(compare);
+
+    let arr = [];
+
+    for(var value in data_values) {
+        let key = getKeyByValue(data, value);
+        let entry = {key, value};
+        arr.push(entry);
     }
 
-    data.sort(compare)
-
-    return data;
+    return arr;
 }
+
+function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+  }
 
 /*
 * display_error()
