@@ -133,19 +133,15 @@ function weather() {
 }
 
 function initialize_weather_button(data) {
-    let weather_div = document.getElementById("weather_hint");
-    let button = document.createElement("button")
-    button.appendChild(document.createTextNode("Get a weather hint!"));
+    let weather_butt = document.getElementById("weather_hint");
 
-    button.onclick = function() {
+    weather_butt.onclick = function() {
         let description = data.weather.description;
         let temp = parseFloat(data.main.temp) - 273.15;
 
         let message = "The weather here is " + description + " and the temperature currently is: " + temp;
         window.alert(message);
     };
-
-    weather_div.appendChild(button);
 }
 
 
