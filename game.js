@@ -88,7 +88,8 @@ function submit_round() {
     param.userId = localStorage.getItem("email");
     param.challengeId = dailyChallenge[index].challengeId;
     let distance = calculateDistance();
-    param.score = calculateScore(distance);
+    let individualScore = calculateScore(distance);
+    param.score = individualScore;
     param.distance = distance;
 
     request.send(JSON.stringify(param)); // JSON object
@@ -96,9 +97,12 @@ function submit_round() {
     request.onreadystatechange = function(){
         if(this.readyState == 4 && this.status == 201) {
             index++;
+            let prevScore = localStorage.getItem("totalscore");
             localStorage.setItem("index", index);
             localStorage.setItem("distance", distance);
-            localStorage.setItem("score", param.score);
+            localStorage.setItem("score", individualScore);
+            let newScore = parseInt(prevScore) + individualScore;
+            localStorage.setItem("totalscore", newScore);
             location.href = "singlescore.html";
         }
     }
