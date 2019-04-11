@@ -2,6 +2,7 @@ let dailyChallenge = {};
 let index = parseInt(localStorage.getItem("index"));
 let marker;
 let initLocation;
+let bearer_token;
 
 let roundText = document.getElementById("round");
 roundText.innerText = index + "/5";
@@ -132,7 +133,7 @@ function twitter_search() {
     console.log(base64_combined);
 
     let request = new XMLHttpRequest();
-    request.open('POST', 'api.twitter.com', true);
+    request.open('POST', 'https://api.twitter.com/oauth2/token', true);
     request.setRequestHeader('Authorization', 'Basic ' + base64_combined);
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
     
@@ -144,13 +145,34 @@ function twitter_search() {
             console.log("Successful POST");
             console.log(data.access_token);
 
-            // data.access_token will contain the twitter bearer token
-            // encode this to base64
-            // every twitter API call from here will need to include this in the Authorization header
+            bearer_token = btoa(data.access_token);
+
+            get_tweet();
         }
     }
 
     request.send('grant_type=client_credentials');
+}
+
+function get_tweet() {
+    let request = new XMLHttpRequest();
+    request.open('GET', 'https://api.twitter.com/1.1/search/tweets.json', true);
+    request.setRequestHeader('Authorization', bearer_token);
+    
+    request.onload = function() {
+        // Begin accessing JSON data here
+        let data = JSON.parse(this.response);
+
+        if (request.status >= 200 && request.status < 400) {
+            // parse and get tweet (statuses[0].text)
+            // update twitter hint button
+            console.log(data.statuses[0].text);
+        }
+    }
+
+    let location = initLocation.lat + "," + initLocation.long + ",5km";
+    let search_query = "q=weather&&geocode=" + location;
+    request.send(search_query);
 }
 
 function placeMarker(location, map) {
