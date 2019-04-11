@@ -32,7 +32,8 @@ function get_daily_challenge() {
                 dailyChallenge[data[i].qNum] = data[i];
             }
             update_map();
-            twitter_search();
+            // twitter_search();
+            weather();
         }
     }
 
@@ -107,6 +108,40 @@ function submit_round() {
             location.href = "singlescore.html";
         }
     }
+}
+
+
+function weather() {
+    let request = new XMLHttpRequest();
+    request.open('GET', 'https://api.openweathermap.org/data/2.5/weather', true);
+    
+    request.onload = function() {
+        // Begin accessing JSON data here
+        let data = JSON.parse(this.response);
+
+        if (request.status >= 200 && request.status < 400) {
+            console.log("Successful POST");
+            console.log(data);
+            // data.weather.description
+            // data.main.temp - 273.15 = degrees celsius
+            initialize_weather_button(data);
+        }
+    }
+
+    let location = "lat=" + initLocation.lat + "&lon=" + initLocation.lng + "&appid=373955760d6a63e5c536f8a6a9151930";
+    request.send(location);
+}
+
+function initialize_weather_button(data) {
+    let weather_butt = document.getElementById("weather_hint");
+
+    weather_butt.onclick = function() {
+        let description = data.weather.description;
+        let temp = parseFloat(data.main.temp) - 273.15;
+
+        let message = "The weather here is " + description + " and the temperature currently is: " + temp;
+        window.alert(message);
+    };
 }
 
 

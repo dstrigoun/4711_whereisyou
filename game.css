@@ -20,13 +20,6 @@
     z-index: 5;
 }
 
-#twitter_hint {
-    position: absolute;
-    bottom: 15px;
-    left: 5px;
-    z-index: 5;
-}
-
 ul {
     list-style-type: none;
     margin: 0;

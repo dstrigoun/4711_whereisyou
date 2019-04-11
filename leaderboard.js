@@ -14,16 +14,6 @@ function get_scores() {
     let date = new Date();
     let month = date.getMonth() + 1;
     let day;
-    // if (date.getMonth() < 10) {
-    //     month = "0" + date.getMonth();
-    // } else {
-    //     month = date.getMonth();
-    // }
-    // if (date.getDate() < 10) {
-    //     day = "0" + date.getDate();
-    // } else {
-    //     day = date.getDate();
-    // }
     let date_string = date.getFullYear() + "-" + month + "-" + date.getDate();
 
     request.setRequestHeader('Content-Type', 'application/json');
@@ -42,7 +32,6 @@ function get_scores() {
 
         if (request.status >= 400) {
             console.log("error: " + data.message);
-            // display_leaderboard(null);
             display_error();
         }
     }
@@ -55,17 +44,8 @@ function get_scores() {
 *
 * Reads in data sent from whereisyou API and creates a table
 * to show top 10 players.
-* TODO: ask about userid/name
-* TODO: order records in order of score (highest to lowest)
 */
 function display_leaderboard(data) {
-    // data is JSON object
-    // {
-    //     "records":[ 
-    //          {"scoreId":"1","challengeId":"1","score":"4142","distance":"1000","date":"2019-10-05"} 
-    //     ]
-    // }
-
     let scores = get_top_ten(data);
     
     let table_div = document.getElementById("table");
@@ -73,7 +53,8 @@ function display_leaderboard(data) {
     tbl.style.width = '100%';
     tbl.setAttribute('border', '1');
     var tbdy = document.createElement('tbody');
-    for (var i = 0; i < 11; i++) {
+
+    for (var i = 0; i < scores.length + 1; i++) {
         var tr = document.createElement('tr');
         for (var j = 0; j < 3; j++) {
             let td = document.createElement('td');
@@ -87,17 +68,22 @@ function display_leaderboard(data) {
                 }
             } else {
                 if (j == 0) {
-                    td.appendChild(document.createTextNode(index));
+                    td.appendChild(document.createTextNode(i));
                 } else if (j == 1) {
-                    td.appendChild(document.createTextNode('name'));
+                    let name = scores[index].key;
+                    td.appendChild(document.createTextNode(name));
                 } else {
-                    td.appendChild(document.createTextNode('hello?'));
+                    let score = scores[index].value;
+                    td.appendChild(document.createTextNode(score));
                 }
+                
             }
             tr.appendChild(td);
         }
         tbdy.appendChild(tr);
-        index++;
+        if (i != 0) {
+            index++;
+        }
     }
     tbl.appendChild(tbdy);
     table_div.appendChild(tbl)
@@ -107,11 +93,34 @@ function display_leaderboard(data) {
 * get_top_ten(data)
 *
 * Parses through the JSON data object and returns the top ten entries
-* TODO: logic
 */
 function get_top_ten(data) {
+    function compare(a,b) {
+        if (a > b)
+            return -1;
+        if (a < b)
+            return 1;
+        return 0;
+    }
 
+    let data_values = Object.values(data);
+    data_values.sort(compare);
+
+    let arr = [];
+
+    for(let i = 0; i < data_values.length; i++) {
+        let value = data_values[i]
+        let key = getKeyByValue(data, value);
+        let entry = {key, value};
+        arr.push(entry);
+    }
+
+    return arr;
 }
+
+function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+  }
 
 /*
 * display_error()
