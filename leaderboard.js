@@ -32,7 +32,6 @@ function get_scores() {
 
         if (request.status >= 400) {
             console.log("error: " + data.message);
-            // display_leaderboard(null);
             display_error();
         }
     }
@@ -45,17 +44,8 @@ function get_scores() {
 *
 * Reads in data sent from whereisyou API and creates a table
 * to show top 10 players.
-* TODO: ask about userid/name
-* TODO: order records in order of score (highest to lowest)
 */
 function display_leaderboard(data) {
-    // data is JSON object
-    // {
-    //     "records":[ 
-    //          {"scoreId":"1","challengeId":"1","score":"4142","distance":"1000","date":"2019-10-05"} 
-    //     ]
-    // }
-
     let scores = get_top_ten(data);
     
     let table_div = document.getElementById("table");
@@ -90,7 +80,9 @@ function display_leaderboard(data) {
             tr.appendChild(td);
         }
         tbdy.appendChild(tr);
-        index++;
+        if (i != 0) {
+            index++;
+        }
     }
     tbl.appendChild(tbdy);
     table_div.appendChild(tbl)
