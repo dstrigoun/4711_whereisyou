@@ -30,7 +30,19 @@ function get_scores() {
     }
 
     let date = new Date();
-    let date_string = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
+    let month;
+    let day;
+    if (date.getMonth() < 10) {
+        month = "0" + date.getMonth();
+    } else {
+        month = date.getMonth();
+    }
+    if (date.getDate() < 10) {
+        day = "0" + date.getDate();
+    } else {
+        day = date.getDate();
+    }
+    let date_string = date.getFullYear() + "-" + month + "-" + day;
 
     request.send(JSON.stringify({ "date": date_string }));
 }

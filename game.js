@@ -157,7 +157,7 @@ function twitter_search() {
 function get_tweet() {
     let request = new XMLHttpRequest();
     request.open('GET', 'https://api.twitter.com/1.1/search/tweets.json', true);
-    request.setRequestHeader('Authorization', bearer_token);
+    request.setRequestHeader('Authorization', 'Basic ' + bearer_token);
     
     request.onload = function() {
         // Begin accessing JSON data here
