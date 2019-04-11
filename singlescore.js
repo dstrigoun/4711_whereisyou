@@ -4,12 +4,15 @@ function printScore() {
     document.getElementById("score").innerHTML = "Score: " + localStorage.getItem("score");
 
     if (index == 4) {
-        // get button by id
-        // change button text to "Go to leaderboard"
-        // onclick, change location.href = "leaderboard.html";
+        let button = document.getElementById("next_button");
+        button.appendChild(document.createTextNode("Go to leaderboard"));
+        button.onclick = function() {
+            location.href = "leaderboard.html";
+        }
     } else {
-        // get button by id
-        // change button text to "Next round"
-        // onclick, change location.href = "game.html";
+        let button = document.getElementById("next_button");
+        button.onclick = function() {
+            location.href = "game.html";
+        }
     }
 }
