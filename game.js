@@ -32,7 +32,8 @@ function get_daily_challenge() {
                 dailyChallenge[data[i].qNum] = data[i];
             }
             update_map();
-            twitter_search();
+            // twitter_search();
+            weather();
         }
     }
 
@@ -107,6 +108,25 @@ function submit_round() {
             location.href = "singlescore.html";
         }
     }
+}
+
+
+function weather() {
+    let request = new XMLHttpRequest();
+    request.open('POST', 'api.openweathermap.org/data/2.5/weather', true);
+    
+    request.onload = function() {
+        // Begin accessing JSON data here
+        let data = JSON.parse(this.response);
+
+        if (request.status >= 200 && request.status < 400) {
+            console.log("Successful POST");
+            console.log(data);
+        }
+    }
+
+    let location = "lat=" + initLocation.lat + "&long=" + initLocation.long;
+    request.send(location);
 }
 
 
