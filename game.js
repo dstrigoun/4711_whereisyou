@@ -83,15 +83,6 @@ function submit_round() {
     request.open('POST', 'https://whereisyou.herokuapp.com/scores.php', true);
     request.setRequestHeader('Content-Type', 'application/json');
     request.setRequestHeader('key', 'bbc8e0e1-2dd4-4bc6-9f7d-1a0b3c5a3668');
-    
-    request.onload = function() {
-        // Begin accessing JSON data here
-        //let data = JSON.parse(this.response);
-
-        //if (request.status >= 200 && request.status < 400) {
-            console.log("Successful POST");
-        //}
-    }
 
     param = {};
     param.userId = localStorage.getItem("email");
