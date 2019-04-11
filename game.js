@@ -166,7 +166,7 @@ function calculateDistance(){
 }
 
 function calculateScore(distance) {
-    let score = 5000 - distance;
+    let score = 1000 - distance;
     let result = Math.round(score);
     return result;
 }
