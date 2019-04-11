@@ -5,7 +5,7 @@ let initLocation;
 let bearer_token;
 
 let roundText = document.getElementById("round");
-roundText.innerText = index + "/5";
+roundText.innerText = (index + 1) + "/5";
 //document.appendChild(roundText);
 
 let submitButton = document.getElementById("submit");
@@ -88,8 +88,8 @@ function submit_round() {
     param = {};
     param.userId = localStorage.getItem("email");
     param.challengeId = dailyChallenge[index].challengeId;
-    let distance = calculateDistance();
-    let individualScore = calculateScore(distance);
+    let distance = Math.round(google.maps.geometry.spherical.computeDistanceBetween(marker.getPosition(), new google.maps.LatLng(initLocation.lat, initLocation.lng)));
+    let individualScore = calculateScore(distance/1000);
     param.score = individualScore;
     param.distance = distance;
 
@@ -144,10 +144,10 @@ function twitter_search() {
         if (request.status >= 200 && request.status < 400) {
             console.log("Successful POST");
             console.log(data.access_token);
-
-            bearer_token = btoa(data.access_token);
-
-            get_tweet();
+            if (data.token_type == "bearer") {
+                bearer_token = btoa(data.access_token);
+                get_tweet();
+            }
         }
     }
 
@@ -171,7 +171,7 @@ function get_tweet() {
     }
 
     let location = initLocation.lat + "," + initLocation.long + ",5km";
-    let search_query = "q=weather&&geocode=" + location;
+    let search_query = "q=weather&geocode=" + location;
     request.send(search_query);
 }
 
@@ -183,16 +183,9 @@ function placeMarker(location, map) {
     map.panTo(location);
 }
 
-function calculateDistance(){
-    let xdistance = Math.abs(marker.getPosition().lat() - initLocation.lat); 
-    let ydistance = Math.abs(marker.getPosition().lng() - initLocation.lng);
-    let distance = Math.sqrt(Math.pow(xdistance, 2) + Math.pow(ydistance, 2));
-    console.log(distance);
-    return distance;
-}
-
 function calculateScore(distance) {
-    let score = 1000 - distance;
+    let score = 5000 - distance;
     let result = Math.round(score);
     return result;
 }
+

@@ -12,7 +12,7 @@ function get_scores() {
     request.open('GET', 'https://whereisyou.herokuapp.com/scores.php', true);
 
     let date = new Date();
-    let month;
+    let month = date.getMonth() + 1;
     let day;
     // if (date.getMonth() < 10) {
     //     month = "0" + date.getMonth();
@@ -24,11 +24,12 @@ function get_scores() {
     // } else {
     //     day = date.getDate();
     // }
-    let date_string = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
+    let date_string = date.getFullYear() + "-" + month + "-" + date.getDate();
 
     request.setRequestHeader('Content-Type', 'application/json');
     request.setRequestHeader('key', 'bbc8e0e1-2dd4-4bc6-9f7d-1a0b3c5a3668');
-    request.setRequestHeader('date', date_string);
+    request.setRequestHeader('currentDate', date_string);
+    request.setRequestHeader('leaderboard', 'true');
     
     request.onload = function() {
         // Begin accessing JSON data here

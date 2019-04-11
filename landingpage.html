@@ -82,7 +82,7 @@
     let xhr = new XMLHttpRequest();
     xhr.open('POST', 'https://jeffchoy.ca/comp4711/badgr-app/users');
     xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.setRequestHeader('authorization', sessionStorage.getItem("key"));
+    xhr.setRequestHeader('authorization', 'bbc8e0e1-2dd4-4bc6-9f7d-1a0b3c5a3668');
     xhr.onload = function() {
       console.log('Signed in as: ' + xhr.responseText);
     };
