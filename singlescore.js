@@ -13,6 +13,7 @@ function printScore() {
         }
     } else {
         let button = document.getElementById("next_button");
+        button.appendChild(document.createTextNode("Next round"));
         button.onclick = function() {
             location.href = "game.html";
         }

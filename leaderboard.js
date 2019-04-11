@@ -14,16 +14,6 @@ function get_scores() {
     let date = new Date();
     let month = date.getMonth() + 1;
     let day;
-    // if (date.getMonth() < 10) {
-    //     month = "0" + date.getMonth();
-    // } else {
-    //     month = date.getMonth();
-    // }
-    // if (date.getDate() < 10) {
-    //     day = "0" + date.getDate();
-    // } else {
-    //     day = date.getDate();
-    // }
     let date_string = date.getFullYear() + "-" + month + "-" + date.getDate();
 
     request.setRequestHeader('Content-Type', 'application/json');
@@ -66,7 +56,7 @@ function display_leaderboard(data) {
     //     ]
     // }
 
-    let scores = get_top(data);
+    let scores = get_top_ten(data);
     
     let table_div = document.getElementById("table");
     var tbl = document.createElement('table');
@@ -90,10 +80,10 @@ function display_leaderboard(data) {
                 if (j == 0) {
                     td.appendChild(document.createTextNode(index));
                 } else if (j == 1) {
-                    let name = scores[index][0];
+                    let name = scores[index].key;
                     td.appendChild(document.createTextNode(name));
                 } else {
-                    let score = scores[index][1];
+                    let score = scores[index].value;
                     td.appendChild(document.createTextNode(score));
                 }
             }
