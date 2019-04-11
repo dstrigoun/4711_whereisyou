@@ -144,10 +144,10 @@ function twitter_search() {
         if (request.status >= 200 && request.status < 400) {
             console.log("Successful POST");
             console.log(data.access_token);
-
-            bearer_token = btoa(data.access_token);
-
-            get_tweet();
+            if (data.token_type == "bearer") {
+                bearer_token = btoa(data.access_token);
+                get_tweet();
+            }
         }
     }
 
@@ -171,7 +171,7 @@ function get_tweet() {
     }
 
     let location = initLocation.lat + "," + initLocation.long + ",5km";
-    let search_query = "q=weather&&geocode=" + location;
+    let search_query = "q=weather&geocode=" + location;
     request.send(search_query);
 }
 

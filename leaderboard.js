@@ -65,13 +65,14 @@ function display_leaderboard(data) {
     //     ]
     // }
 
-    let scores = get_top_ten(data);
+    let scores = get_top(data);
     
     let table_div = document.getElementById("table");
     var tbl = document.createElement('table');
     tbl.style.width = '100%';
     tbl.setAttribute('border', '1');
     var tbdy = document.createElement('tbody');
+
     for (var i = 0; i < 11; i++) {
         var tr = document.createElement('tr');
         for (var j = 0; j < 3; j++) {
@@ -88,7 +89,8 @@ function display_leaderboard(data) {
                 if (j == 0) {
                     td.appendChild(document.createTextNode(index));
                 } else if (j == 1) {
-                    td.appendChild(document.createTextNode('name'));
+                    let name = scores[index];
+                    td.appendChild(document.createTextNode(name));
                 } else {
                     td.appendChild(document.createTextNode('hello?'));
                 }
@@ -106,10 +108,24 @@ function display_leaderboard(data) {
 * get_top_ten(data)
 *
 * Parses through the JSON data object and returns the top ten entries
-* TODO: logic
 */
 function get_top_ten(data) {
+    function compare(a,b) {
+        if (data.a < data.b)
+            return -1;
+        if (data.a > data.b)
+            return 1;
+        return 0;
+    }
 
+    for(var i in data) {
+        console.log(i);             // key
+        console.log(data[i]);       // value
+    }
+
+    data.sort(compare)
+
+    return data;
 }
 
 /*
