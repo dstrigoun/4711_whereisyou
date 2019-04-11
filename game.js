@@ -128,7 +128,7 @@ function twitter_search() {
     console.log(base64_combined);
 
     let request = new XMLHttpRequest();
-    request.open('POST', 'api.twitter.com', true);
+    request.open('POST', 'https://api.twitter.com/oauth2/token', true);
     request.setRequestHeader('Authorization', 'Basic ' + base64_combined);
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
     
